@@ -1,5 +1,6 @@
 package com.rahul.roomdatabasemvvm;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +12,18 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.rahul.roomdatabasemvvm.activities.MainActivity;
 import com.rahul.roomdatabasemvvm.model.UserModal;
 
 public class CourseRVAdapter extends ListAdapter<UserModal, CourseRVAdapter.ViewHolder> {
 
     private OnItemClickListener listener;
+    Context context;
 
-    public CourseRVAdapter() {
+    public CourseRVAdapter(Context context) {
         super(DIFF_CALLBACK);
+        this.context = context;
     }
 
     private static final DiffUtil.ItemCallback<UserModal> DIFF_CALLBACK = new DiffUtil.ItemCallback<UserModal>() {
@@ -49,7 +54,9 @@ public class CourseRVAdapter extends ListAdapter<UserModal, CourseRVAdapter.View
         holder.courseNameTV.setText(model.getCourseName());
         holder.courseDescTV.setText(model.getCourseDescription());
         holder.courseDurationTV.setText(model.getCourseDuration());
-        holder.img_profile.setImageBitmap(BitmapManager.byteToBitmap(model.getImage()));
+//        holder.img_profile.setImageBitmap(BitmapManager.byteToBitmap(model.getImage()));
+        Glide.with(context).load(model.getImage()).dontTransform().into(holder.img_profile);
+
 
     }
 

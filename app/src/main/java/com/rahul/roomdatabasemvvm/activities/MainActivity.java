@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         coursesRV.setLayoutManager(new LinearLayoutManager(this));
         coursesRV.setHasFixedSize(true);
-        adapter = new CourseRVAdapter();
+        adapter = new CourseRVAdapter(this);
         coursesRV.setAdapter(adapter);
         viewmodal = ViewModelProviders.of(this).get(ViewModal.class);
 
