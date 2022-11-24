@@ -1,67 +1,66 @@
 package com.rahul.roomdatabasemvvm.activities;
 
+import static com.rahul.roomdatabasemvvm.Constant.EXTRA_ID;
+import static com.rahul.roomdatabasemvvm.Constant.EXTRA_IMAGE;
+import static com.rahul.roomdatabasemvvm.Constant.EXTRA_USER_DATE;
+import static com.rahul.roomdatabasemvvm.Constant.EXTRA_USER_NAME;
+import static com.rahul.roomdatabasemvvm.Constant.EXTRA_USER_NUMBER;
+
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.rahul.roomdatabasemvvm.BitmapManager;
-import com.rahul.roomdatabasemvvm.R;
-import com.rahul.roomdatabasemvvm.ViewModal;
+import com.rahul.roomdatabasemvvm.database.ViewModal;
+import com.rahul.roomdatabasemvvm.databinding.ActivityNewUserBinding;
 import com.rahul.roomdatabasemvvm.model.UserModal;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class NewUserActivity extends AppCompatActivity {
 
-    private EditText courseNameEdt, courseDescEdt, courseDurationEdt;
-    private Button courseBtn;
-    public static final String EXTRA_ID = "EXTRA_ID";
-    public static final String EXTRA_COURSE_NAME = "EXTRA_COURSE_NAME";
-    public static final String EXTRA_DESCRIPTION = "EXTRA_COURSE_DESCRIPTION";
-    public static final String EXTRA_DURATION = "EXTRA_COURSE_DURATION";
-    public static final String EXTRA_IMAGE = "EXTRA_IMAGE";
     private ViewModal viewmodal;
     Bitmap bitmap;
-    ImageView img_profile;
     private static final int SELECT_PICTURE = 1;
-
+    private ActivityNewUserBinding binding;
+    String userDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_course);
 
-        courseNameEdt = findViewById(R.id.idEdtCourseName);
-        courseDescEdt = findViewById(R.id.idEdtCourseDescription);
-        courseDurationEdt = findViewById(R.id.idEdtCourseDuration);
-        courseBtn = findViewById(R.id.idBtnSaveCourse);
-        img_profile = findViewById(R.id.img_profile);
+        binding = ActivityNewUserBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
 
         viewmodal = ViewModelProviders.of(this).get(ViewModal.class);
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_ID)) {
-            courseNameEdt.setText(intent.getStringExtra(EXTRA_COURSE_NAME));
-            courseDescEdt.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
-            courseDurationEdt.setText(intent.getStringExtra(EXTRA_DURATION));
+            binding.idEdtUserName.setText(intent.getStringExtra(EXTRA_USER_NAME));
+            binding.idEdtUserNumber.setText(intent.getStringExtra(EXTRA_USER_NUMBER));
+            binding.idEdtUserDate.setText(intent.getStringExtra(EXTRA_USER_DATE));
 
             byte[] image = intent.getByteArrayExtra(EXTRA_IMAGE);
-           bitmap =  BitmapManager.byteToBitmap(image);
-            img_profile.setImageBitmap(bitmap);
+            bitmap = BitmapManager.byteToBitmap(image);
+            binding.imgProfile.setImageBitmap(bitmap);
         }
 
-        img_profile.setOnClickListener(new View.OnClickListener() {
+        binding.imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -70,39 +69,82 @@ public class NewUserActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
             }
         });
-        courseBtn.setOnClickListener(new View.OnClickListener() {
+
+        binding.idEdtUserDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar newCalendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(NewUserActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        binding.idEdtUserDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                    }
+
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+            }
+        });
+        binding.idBtnSave.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                String courseName = courseNameEdt.getText().toString();
-                String courseDesc = courseDescEdt.getText().toString();
-                String courseDuration = courseDurationEdt.getText().toString();
-                if (courseName.isEmpty() || courseDesc.isEmpty() || courseDuration.isEmpty()) {
-                    Toast.makeText(NewUserActivity.this, "Please enter the valid course details.", Toast.LENGTH_SHORT).show();
+                String username = binding.idEdtUserName.getText().toString();
+                String userNumber = binding.idEdtUserNumber.getText().toString();
+                userDate = binding.idEdtUserDate.getText().toString();
+                if (username.isEmpty()) {
+                    Toast.makeText(NewUserActivity.this, "Please add user name !", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (bitmap == null){
-                    Toast.makeText(NewUserActivity.this, "Please add Image", Toast.LENGTH_SHORT).show();
+                if (userNumber.isEmpty()) {
+                    Toast.makeText(NewUserActivity.this, "Please add user Number !", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (userDate.isEmpty()) {
+                    Toast.makeText(NewUserActivity.this, "Please add user Date !", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (userNumber.length() < 10) {
+                    Toast.makeText(NewUserActivity.this, "Please add 10 digit Number !", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (bitmap == null) {
+                    Toast.makeText(NewUserActivity.this, "Please add Image !", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!isValidDate(userDate)) {
+                    Toast.makeText(NewUserActivity.this, "Please add Valid Date !", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 byte[] image = BitmapManager.bitmapToByte(bitmap);
-                saveCourse(courseName, courseDesc, courseDuration,image);
+                saveCourse(username, userNumber, userDate, image);
             }
         });
     }
 
-    private void saveCourse(String courseName, String courseDescription, String courseDuration, byte[] image) {
+    public static boolean isValidDate(String inDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(inDate.trim());
+        } catch (ParseException pe) {
+            return false;
+        }
+        return true;
+    }
+
+    private void saveCourse(String username, String userNumber, String userDate, byte[] image) {
         UserModal model;
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
-        if (id != -1){
-            model = new UserModal(courseName, courseDescription, courseDuration,image);
+        if (id != -1) {
+            model = new UserModal(username, userNumber, userDate, image);
             model.setId(id);
             viewmodal.update(model);
-        }else {
-            model = new UserModal(courseName, courseDescription, courseDuration,image);
+        } else {
+            model = new UserModal(username, userNumber, userDate, image);
             viewmodal.insert(model);
         }
         finish();
-        Log.e("rrr", "saveCourse-----id---: "+id );
 
     }
 
@@ -113,7 +155,7 @@ public class NewUserActivity extends AppCompatActivity {
                 Uri uri = data.getData();
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                    img_profile.setImageBitmap(bitmap);
+                    binding.imgProfile.setImageBitmap(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

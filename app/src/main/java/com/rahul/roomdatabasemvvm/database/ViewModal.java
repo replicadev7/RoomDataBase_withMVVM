@@ -1,4 +1,4 @@
-package com.rahul.roomdatabasemvvm;
+package com.rahul.roomdatabasemvvm.database;
 
 import android.app.Application;
 
@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.rahul.roomdatabasemvvm.database.UserRepository;
 import com.rahul.roomdatabasemvvm.model.UserModal;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class ViewModal extends AndroidViewModel {
     public ViewModal(@NonNull Application application) {
         super(application);
         repository = new UserRepository(application);
-        allCourses = repository.getAllCourses();
+        allCourses = repository.getAllUser();
     }
 
     public void insert(UserModal model) {
@@ -33,10 +32,11 @@ public class ViewModal extends AndroidViewModel {
         repository.delete(model);
     }
 
-    public void deleteAllCourses() {
-        repository.deleteAllCourses();
+    public void deleteAllUsers() {
+        repository.deleteAllUser();
     }
-    public LiveData<List<UserModal>> getAllCourses() {
+
+    public LiveData<List<UserModal>> getAllUsers() {
         return allCourses;
     }
 }

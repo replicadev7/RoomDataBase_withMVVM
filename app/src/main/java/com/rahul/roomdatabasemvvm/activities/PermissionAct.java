@@ -26,17 +26,20 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.rahul.roomdatabasemvvm.R;
+import com.rahul.roomdatabasemvvm.databinding.ActivityPermissionBinding;
 
 import java.util.Arrays;
 
 public class PermissionAct extends AppCompatActivity {
 
-    public static int percnt = 0;
+    public int percnt = 0;
+    ActivityPermissionBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_permission);
+        binding = ActivityPermissionBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         percnt = 0;
 
@@ -53,6 +56,7 @@ public class PermissionAct extends AppCompatActivity {
                 break;
         }
     }
+
     public void IntentMAin() {
         startActivity(new Intent(PermissionAct.this, MainActivity.class));
         finish();

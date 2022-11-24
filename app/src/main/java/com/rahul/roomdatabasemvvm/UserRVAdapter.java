@@ -13,15 +13,14 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.rahul.roomdatabasemvvm.activities.MainActivity;
 import com.rahul.roomdatabasemvvm.model.UserModal;
 
-public class CourseRVAdapter extends ListAdapter<UserModal, CourseRVAdapter.ViewHolder> {
+public class UserRVAdapter extends ListAdapter<UserModal, UserRVAdapter.ViewHolder> {
 
     private OnItemClickListener listener;
     Context context;
 
-    public CourseRVAdapter(Context context) {
+    public UserRVAdapter(Context context) {
         super(DIFF_CALLBACK);
         this.context = context;
     }
@@ -34,9 +33,9 @@ public class CourseRVAdapter extends ListAdapter<UserModal, CourseRVAdapter.View
 
         @Override
         public boolean areContentsTheSame(UserModal oldItem, UserModal newItem) {
-            return oldItem.getCourseName().equals(newItem.getCourseName()) &&
-                    oldItem.getCourseDescription().equals(newItem.getCourseDescription()) &&
-                    oldItem.getCourseDuration().equals(newItem.getCourseDuration());
+            return oldItem.getUserName().equals(newItem.getUserName()) &&
+                    oldItem.getUserNumber().equals(newItem.getUserNumber()) &&
+                    oldItem.getUserDate().equals(newItem.getUserDate());
         }
     };
 
@@ -51,9 +50,9 @@ public class CourseRVAdapter extends ListAdapter<UserModal, CourseRVAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UserModal model = getCourseAt(position);
-        holder.courseNameTV.setText(model.getCourseName());
-        holder.courseDescTV.setText(model.getCourseDescription());
-        holder.courseDurationTV.setText(model.getCourseDuration());
+        holder.courseNameTV.setText(model.getUserName());
+        holder.courseDescTV.setText(model.getUserNumber());
+        holder.courseDurationTV.setText(model.getUserDate());
 //        holder.img_profile.setImageBitmap(BitmapManager.byteToBitmap(model.getImage()));
         Glide.with(context).load(model.getImage()).dontTransform().into(holder.img_profile);
 

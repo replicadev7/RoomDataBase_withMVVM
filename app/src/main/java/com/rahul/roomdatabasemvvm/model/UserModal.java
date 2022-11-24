@@ -8,22 +8,25 @@ import androidx.room.PrimaryKey;
 public class UserModal {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String courseName;
-    private String courseDescription;
-    private String courseDuration;
+    private String UserName;
+    private String userNumber;
+    private String userDate;
 
     @ColumnInfo(name = "image", typeAffinity = ColumnInfo.BLOB)
     private byte[] image;
 
 
-    public UserModal(String courseName, String courseDescription, String courseDuration, byte[] image) {
-        this.courseName = courseName;
-        this.courseDescription = courseDescription;
-        this.courseDuration = courseDuration;
+    public UserModal(String courseName, String userNumber, String userDate, byte[] image) {
+        this.UserName = courseName;
+        this.userNumber = userNumber;
+        this.userDate = userDate;
         this.image=image;
     }
 
 
+    public UserModal(){
+
+    }
 
     public byte[] getImage() {
         return image;
@@ -33,28 +36,28 @@ public class UserModal {
         this.image = image;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public String getUserName() {
+        return UserName;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setUserName(String courseName) {
+        this.UserName = courseName;
     }
 
-    public String getCourseDescription() {
-        return courseDescription;
+    public String getUserNumber() {
+        return userNumber;
     }
 
-    public void setCourseDescription(String courseDescription) {
-        this.courseDescription = courseDescription;
+    public void setUserNumber(String userNumber) {
+        this.userNumber = userNumber;
     }
 
-    public String getCourseDuration() {
-        return courseDuration;
+    public String getUserDate() {
+        return userDate;
     }
 
-    public void setCourseDuration(String courseDuration) {
-        this.courseDuration = courseDuration;
+    public void setUserDate(String userDate) {
+        this.userDate = userDate;
     }
 
     public int getId() {

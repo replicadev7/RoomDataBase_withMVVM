@@ -18,7 +18,7 @@ public abstract class UserDatabase extends RoomDatabase {
     public static synchronized UserDatabase getInstance(Context context) {
         if (instance == null) {
             instance =
-                    Room.databaseBuilder(context.getApplicationContext(), UserDatabase.class, "course_database")
+                    Room.databaseBuilder(context.getApplicationContext(), UserDatabase.class, "user_db")
                             .fallbackToDestructiveMigration()
                             .addCallback(roomCallback)
                             .build();

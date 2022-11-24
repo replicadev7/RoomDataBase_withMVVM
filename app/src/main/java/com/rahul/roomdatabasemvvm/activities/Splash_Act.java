@@ -11,16 +11,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.rahul.roomdatabasemvvm.R;
+import com.rahul.roomdatabasemvvm.databinding.SplashActBinding;
 
 
 public class Splash_Act extends AppCompatActivity {
 
 
+    SplashActBinding binding;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_act);
 
+        binding = SplashActBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         new Handler().postDelayed(new Runnable() {
             @Override

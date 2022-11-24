@@ -19,7 +19,7 @@ public interface UserDao {
     @Delete
     void delete(UserModal model);
     @Query("DELETE FROM user_table")
-    void deleteAllCourses();
-    @Query("SELECT * FROM user_table ORDER BY courseName ASC")
-    LiveData<List<UserModal>> getAllCourses();
+    void deleteAllUser();
+    @Query("SELECT * FROM user_table ORDER BY userDate DESC")
+    LiveData<List<UserModal>> getAllUsers();
 }

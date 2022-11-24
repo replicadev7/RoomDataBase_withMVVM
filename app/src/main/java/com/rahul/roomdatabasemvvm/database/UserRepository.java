@@ -11,39 +11,39 @@ import java.util.List;
 
 public class UserRepository {
     private UserDao dao;
-    private LiveData<List<UserModal>> allCourses;
+    private LiveData<List<UserModal>> allUser;
 
 
     public UserRepository(Application application) {
         UserDatabase database = UserDatabase.getInstance(application);
         dao = database.Dao();
-        allCourses = dao.getAllCourses();
+        allUser = dao.getAllUsers();
     }
 
     public void insert(UserModal model) {
-        new InsertCourseAsyncTask(dao).execute(model);
+        new InsertUserAsyncTask(dao).execute(model);
     }
 
     public void update(UserModal model) {
-        new UpdateCourseAsyncTask(dao).execute(model);
+        new UpdateUserAsyncTask(dao).execute(model);
     }
 
     public void delete(UserModal model) {
-        new DeleteCourseAsyncTask(dao).execute(model);
+        new DeleteUserAsyncTask(dao).execute(model);
     }
 
-    public void deleteAllCourses() {
-        new DeleteAllCoursesAsyncTask(dao).execute();
+    public void deleteAllUser() {
+        new DeleteAllUserAsyncTask(dao).execute();
     }
 
-    public LiveData<List<UserModal>> getAllCourses() {
-        return allCourses;
+    public LiveData<List<UserModal>> getAllUser() {
+        return allUser;
     }
 
-    private static class InsertCourseAsyncTask extends AsyncTask<UserModal, Void, Void> {
+    private static class InsertUserAsyncTask extends AsyncTask<UserModal, Void, Void> {
         private UserDao dao;
 
-        private InsertCourseAsyncTask(UserDao dao) {
+        private InsertUserAsyncTask(UserDao dao) {
             this.dao = dao;
         }
 
@@ -54,10 +54,10 @@ public class UserRepository {
         }
     }
 
-    private static class UpdateCourseAsyncTask extends AsyncTask<UserModal, Void, Void> {
+    private static class UpdateUserAsyncTask extends AsyncTask<UserModal, Void, Void> {
         private UserDao dao;
 
-        private UpdateCourseAsyncTask(UserDao dao) {
+        private UpdateUserAsyncTask(UserDao dao) {
             this.dao = dao;
         }
 
@@ -68,10 +68,10 @@ public class UserRepository {
         }
     }
 
-    private static class DeleteCourseAsyncTask extends AsyncTask<UserModal, Void, Void> {
+    private static class DeleteUserAsyncTask extends AsyncTask<UserModal, Void, Void> {
         private UserDao dao;
 
-        private DeleteCourseAsyncTask(UserDao dao) {
+        private DeleteUserAsyncTask(UserDao dao) {
             this.dao = dao;
         }
 
@@ -82,14 +82,15 @@ public class UserRepository {
         }
     }
 
-    private static class DeleteAllCoursesAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class DeleteAllUserAsyncTask extends AsyncTask<Void, Void, Void> {
         private UserDao dao;
-        private DeleteAllCoursesAsyncTask(UserDao dao) {
+
+        private DeleteAllUserAsyncTask(UserDao dao) {
             this.dao = dao;
         }
         @Override
         protected Void doInBackground(Void... voids) {
-            dao.deleteAllCourses();
+            dao.deleteAllUser();
             return null;
         }
     }
